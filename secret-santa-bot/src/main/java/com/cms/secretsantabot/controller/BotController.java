@@ -2,12 +2,13 @@ package com.cms.secretsantabot.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.cms.secretsantabot.model.Employee;
 import com.cms.secretsantabot.services.EmployeeService;
@@ -40,6 +42,13 @@ public class BotController {
 		return employeeService.getAllEmployees();
 	}
 
+
+	@GetMapping(value = "/reports/generate")
+	public StreamingResponseBody generateReport(HttpServletResponse response) {
+		System.out.println("inside generate report");
+		return employeeService.generateReport(response);
+	}
+
 	@GetMapping(value = "/employees/{empId}")
 	public Employee findById(@PathVariable("empId") int id) {
 		System.out.println("inside find by id:"+ id);
@@ -59,19 +68,7 @@ public class BotController {
 		return employeeService.updateEmployee(employee);
 	}
 
-	/*@PutMapping(value = "/employees/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public void update(@PathVariable( "id" ) Long id, @RequestBody Employee resource) {
-		//checkNotNull
-		//employeeService.update(resource);
-	}
 
-	@DeleteMapping(value = "/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public void delete(@PathVariable("id") Long id) {
-		//checkNotNull
-		//employeeService.deleteById(id);
-	}*/
 
 	@GetMapping(value = "/getAllMatchedEmployees")
 	public List<Employee> getAllMatchedEmployees() {
