@@ -1,5 +1,6 @@
 package com.cms.secretsantabot.servicesImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.cms.secretsantabot.Util.CommonConstants;
 import com.cms.secretsantabot.model.Employee;
 import com.cms.secretsantabot.repository.EmployeeRepository;
 import com.cms.secretsantabot.services.EmailService;
@@ -30,7 +32,11 @@ public class EmailServiceImpl implements EmailService {
 	@Override
 	public void sendEmailstoEmployee(List<Employee> employees) {
 		employees.stream().forEach(employee -> {
-			SimpleMailMessage simpleMailMessage = composeEmail("subject", "message", employee);
+			Employee toEmployee = employeeRepository.getEmployeesById(employee.getToEmpId());
+			List<String> wishlist = new ArrayList<>();
+			toEmployee.getWishList().forEach((s, wish) -> wishlist.add(wish));
+			String messageBody = String.format(CommonConstants.MESSAGE_BODY, employee.getEmpName().toUpperCase(), toEmployee.getEmpName(), wishlist.get(0), wishlist.get(1), wishlist.get(2), environment.getProperty("admin.name"));
+			SimpleMailMessage simpleMailMessage = composeEmail("Merry Christmas", messageBody, employee);
 			log.info("Sending Email to={}", employee.getEmpName());
 			mailSender.send(simpleMailMessage);
 		});
