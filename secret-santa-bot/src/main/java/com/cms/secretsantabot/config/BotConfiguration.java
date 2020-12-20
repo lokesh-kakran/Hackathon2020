@@ -13,7 +13,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-public class BotConfiguration  {
+public class BotConfiguration {
 
 	@Bean
 	public DefaultSecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -31,11 +31,11 @@ public class BotConfiguration  {
 
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-		configuration.setAllowedMethods(Arrays.asList("GET","POST","OPTIONS"));
-		configuration.setAllowedHeaders(Arrays.asList("Content-Type"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS"));
+		configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Access-Control-Allow-Origin"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/api/**", configuration);
-	return source;
+		return source;
 	}
 
 }
