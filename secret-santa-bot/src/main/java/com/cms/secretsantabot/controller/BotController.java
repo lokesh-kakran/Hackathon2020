@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.cms.secretsantabot.model.Employee;
 import com.cms.secretsantabot.services.EmailService;
@@ -41,7 +40,7 @@ public class BotController {
 
 	@GetMapping(value = "/employees")
 	public List<Employee> getAllEmployees() {
-		System.out.println("inside getAllEmployees");
+		log.info("inside getAllEmployees");
 		return employeeService.getAllEmployees();
 	}
 
@@ -54,30 +53,22 @@ public class BotController {
 
 	@GetMapping(value = "/employees/{empId}")
 	public Employee findById(@PathVariable("empId") int id) {
-		System.out.println("inside find by id:" + id);
+		log.info("inside find by id:{}", id);
 		return employeeService.getEmployeesById(id);
 	}
 
-	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = "/employees", method = RequestMethod.POST)
-	public Employee addEmployee(@RequestBody Employee employee) {
-		System.out.println("inside add record:" + employee);
-		return employeeService.addEmployee(employee);
-	}
-
-	@RequestMapping(value = "/employees", method = RequestMethod.PUT)
-	public Employee updateEmployee(@RequestBody Employee employee) {
-		System.out.println("inside update record:" + employee);
-		return employeeService.updateEmployee(employee);
-	}
-
-
-
 	@GetMapping(value = "/getAllMatchedEmployees")
+	@ResponseStatus(HttpStatus.OK)
 	public List<Employee> getAllMatchedEmployees() {
 		log.info("Generation logic : controller");
 		nameGeneratingService.saveAllMatchedEmployees();
 		return employeeService.getAllEmployees();
+	}
+
+	@GetMapping(value = "/reports/generate")
+	public ResponseEntity<byte[]> generateReport(HttpServletResponse response) {
+		System.out.println("inside generate report");
+		return employeeService.generateReport(response);
 	}
 
 	@GetMapping(value = "/sendEmails")
