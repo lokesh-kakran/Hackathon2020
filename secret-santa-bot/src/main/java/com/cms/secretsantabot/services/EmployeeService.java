@@ -14,5 +14,5 @@ public interface EmployeeService {
 	public Employee getEmployeesById(int id);
 	public Employee addEmployee(Employee employee);
 	public Employee updateEmployee(Employee employee);
-	public StreamingResponseBody generateReport(HttpServletResponse response);
+	public ResponseEntity<byte[]> generateReport(HttpServletResponse response);
 }

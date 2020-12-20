@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,11 +45,17 @@ public class BotController {
 		return employeeService.getAllEmployees();
 	}
 
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(value = "/employees", method = RequestMethod.POST)
+	public Employee addEmployee(@RequestBody Employee employee) {
+		log.info("inside add record:" + employee);
+		return employeeService.addEmployee(employee);
+	}
 
-	@GetMapping(value = "/reports/generate")
-	public StreamingResponseBody generateReport(HttpServletResponse response) {
-		System.out.println("inside generate report");
-		return employeeService.generateReport(response);
+	@RequestMapping(value = "/employees", method = RequestMethod.PUT)
+	public Employee updateEmployee(@RequestBody Employee employee) {
+		log.info("Inside update record:" + employee);
+		return employeeService.updateEmployee(employee);
 	}
 
 	@GetMapping(value = "/employees/{empId}")
